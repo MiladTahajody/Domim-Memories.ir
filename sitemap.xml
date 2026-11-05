@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- sitemap.xml - list of pages for search engines (Persian + English version of every page).
+     1) Replace https://domim-memories.ir/ with your real domain (Find & Replace).
+     2) Update <lastmod> when you change a page's content.
+     3) Submit this file in Google Search Console. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://domim-memories.ir/</loc>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://domim-memories.ir/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://domim-memories.ir/?lang=en"/>
+    <lastmod>2026-11-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://domim-memories.ir/?lang=en</loc>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://domim-memories.ir/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://domim-memories.ir/?lang=en"/>
+    <lastmod>2026-11-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://domim-memories.ir/albums.html</loc>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://domim-memories.ir/albums.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://domim-memories.ir/albums.html?lang=en"/>
+    <lastmod>2026-11-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://domim-memories.ir/albums.html?lang=en</loc>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://domim-memories.ir/albums.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://domim-memories.ir/albums.html?lang=en"/>
+    <lastmod>2026-11-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://domim-memories.ir/newspapers.html</loc>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://domim-memories.ir/newspapers.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://domim-memories.ir/newspapers.html?lang=en"/>
+    <lastmod>2026-11-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://domim-memories.ir/newspapers.html?lang=en</loc>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://domim-memories.ir/newspapers.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://domim-memories.ir/newspapers.html?lang=en"/>
+    <lastmod>2026-11-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://domim-memories.ir/bags.html</loc>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://domim-memories.ir/bags.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://domim-memories.ir/bags.html?lang=en"/>
+    <lastmod>2026-11-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://domim-memories.ir/bags.html?lang=en</loc>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://domim-memories.ir/bags.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://domim-memories.ir/bags.html?lang=en"/>
+    <lastmod>2026-11-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://domim-memories.ir/cards.html</loc>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://domim-memories.ir/cards.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://domim-memories.ir/cards.html?lang=en"/>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://domim-memories.ir/cards.html?lang=en</loc>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://domim-memories.ir/cards.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://domim-memories.ir/cards.html?lang=en"/>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+</urlset>
