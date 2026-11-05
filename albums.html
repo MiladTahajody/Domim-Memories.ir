@@ -2,6 +2,7 @@
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="utf-8">
+<meta name="google" content="notranslate">
 <!-- =====================================================================
      Domim | albums.html
      Every page is the same small shell: the visible content (header, sections, footer) is built by
@@ -51,6 +52,44 @@
 <!-- css/style.css = layout + components, css/fx.css = motion, 3D and the animated background -->
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/fx.css">
+
+<script>
+        (function() {
+            document.addEventListener("contextmenu", function(e) {
+                e.preventDefault();
+            });
+            document.addEventListener("keydown", function(e) {
+                const key = e.key;
+                const ctrl = e.ctrlKey || e.metaKey;
+                const shift = e.shiftKey;
+                if (ctrl && key === "u") {
+                    e.preventDefault();
+                    return;
+                }
+                if (key === "F12") {
+                    e.preventDefault();
+                    return;
+                }
+                if (ctrl && shift && key === "I") {
+                    e.preventDefault();
+                    return;
+                }
+                if (ctrl && shift && key === "J") {
+                    e.preventDefault();
+                    return;
+                }
+                if (ctrl && shift && key === "C") {
+                    e.preventDefault();
+                    return;
+                }
+                if (ctrl && key === "s") {
+                    e.preventDefault();
+                    return;
+                }
+            });
+        })();
+</script>
+     
 </head>
 <body data-page="albums">
 <!-- Animated background: soft colour washes + floating clouds, balloons, stars, moons and hearts (the shapes are added by js/fx.js) -->
