@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Simple telegram glyph (white, 24x24). Shown on a coloured circle in the footer.
+     To use the official brand icon instead, replace this file and keep the name icons/telegram.svg. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21.5 3.6 2.7 10.900a.800.8 0 0 0 .050 1.500l4.8 1.6 1.9 5.900a.800.8 0 0 0 1.3.300l2.7-2.5 4.9 3.600a.800.8 0 0 0 1.3-.500L22.4 4.600a.800.8 0 0 0-.900-1zM9.4 13.300l8.3-5.2-6.6 6.3-.3 3z" fill="#fff" fill-rule="evenodd"/></svg>

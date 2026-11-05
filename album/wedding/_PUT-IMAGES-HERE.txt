@@ -1,0 +1,1 @@
+Put the photos of this tag here, named wedding-1.webp, wedding-2.webp ... (see PRODUCTS in content.js for how many are expected).

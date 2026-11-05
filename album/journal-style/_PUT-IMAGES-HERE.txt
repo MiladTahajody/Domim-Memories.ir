@@ -1,0 +1,1 @@
+Put the photos of this tag here, named journal-style-1.webp, journal-style-2.webp ... (see PRODUCTS in content.js for how many are expected).

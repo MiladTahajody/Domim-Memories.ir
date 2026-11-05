@@ -1,0 +1,1 @@
+Put the photos of this tag here, named animation-characters-1.webp, animation-characters-2.webp ... (see PRODUCTS in content.js for how many are expected).

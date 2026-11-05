@@ -1,0 +1,569 @@
+/* ==========================================================
+   Domim - style.css (shared by all pages: layout + components)
+   Motion, 3D effects and the animated background live in fx.css.
+   Uses logical properties (inline-start/end) so RTL (fa) and LTR (en) both work.
+
+   MAP OF THIS FILE
+    0. Fonts (self-hosted)
+    1. Edge controls + design tokens (colours, width)
+    2. Base
+    3. Header (with page icons)
+    4. Buttons
+    5. Image placeholder
+    6. Home: hero
+    7. Home: section headings + category cards
+    8. Home: "Why Domim" (bento tiles)
+    9. Home: "How to order" (progress path)
+   10. Home: reviews (horizontal 16:9 screenshot gallery)
+   11. Home: FAQ (accordion + crib mobile)
+   12. Product pages: banner, tags, gallery, order box
+   13. Lightbox (photo zoom)
+   14. Footer (night sky) + back-to-top button
+   15. Responsive rules (tablet / phone)
+   ========================================================== */
+
+/* ==== 0. FONTS (self-hosted, no external requests) ====
+   Vazirmatn = Persian (and fallback for Latin), Outfit = English. Both are variable fonts: one file covers every
+   weight 100-900, so the rest of this file can use font-weight 400/500/600/700/800.
+   Files are in ../fonts/ (relative to this css file). Licenses: SIL Open Font License (OFL-Vazirmatn.txt, LICENSE-Outfit.txt).
+   Outfit is split by character range: the browser downloads the "latin" file for normal English text and
+   "latin-ext" only when a page uses accented characters. The pages also preload the two main files in their <head>. */
+@font-face{
+  font-family:'Vazirmatn';
+  src:url('../fonts/Vazirmatn-Variable.woff2') format('woff2');
+  font-weight:100 900;font-style:normal;font-display:swap;
+}
+/* Outfit is split by character range: the browser downloads the "latin" file for normal English text
+   and "latin-ext" only when a page uses accented characters. */
+@font-face{
+  font-family:'Outfit';
+  src:url('../fonts/Outfit-Variable-latin-ext.woff2') format('woff2');
+  font-weight:100 900;font-style:normal;font-display:swap;
+  unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face{
+  font-family:'Outfit';
+  src:url('../fonts/Outfit-Variable-latin.woff2') format('woff2');
+  font-weight:100 900;font-style:normal;font-display:swap;
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+/* ==== 1. SKEW / EDGE CONTROLS (edit these by hand) ====
+   Two INDEPENDENT diagonal edges: FT = footer top, CR = top of the designer-credit line.
+   (The header is now a floating rounded bar: its controls are --hb-radius / --hb-bg in section 3.)
+   --xx-slant     height of the diagonal in px (0px = flat edge, bigger = steeper)   [desktop]
+   --xx-slant-m   same, for phones (screen width <= 800px)
+   --xx-dir       direction: 1 = rises toward the right, -1 = rises toward the left
+   --xx-edge-w    thickness of the coloured line along the diagonal (0px = no line)
+   --xx-edge      colour of that line          --ft-bg / --cr-bg   fill colour of each part
+   --cr-fg        text colour of the credit line
+   --mirror-rtl   -1 = on Persian pages the diagonals are mirrored; 1 = same direction in both languages */
+:root{
+  --ft-slant:14px;--ft-slant-m:8px;--ft-dir:1;--ft-edge-w:5px;--ft-bg:linear-gradient(180deg,#2b2560 0%,#1d1b38 78%);--ft-edge:#4a3fd0;
+  --cr-slant:10px;--cr-slant-m:6px;--cr-dir:1;--cr-edge-w:2px;--cr-bg:#1d1b38;--cr-fg:#ffffffb3;--cr-edge:var(--ft-edge);
+  --mirror-rtl:-1}
+html{--m:1} html[dir=rtl]{--m:var(--mirror-rtl)}
+
+/* ---- Design tokens ----
+   Brand indigo (--acc) + soft baby pastels used for category colours, illustrations and backgrounds. */
+:root{--bg:#faf8ff;--ink:#231f4a;--mut:#645f82;--acc:#4a3fd0;--acc-d:#2f2690;--soft:#ebe8fa;--line:#dcd8f0;--hl:#ffd66b;--w:1160px;
+  --blush:#ffd3df;--butter:#ffe6a1;--mint:#c4f0df;--sky:#cfe6ff;--lilac:#e3deff;--peach:#ffdcc2;
+  --shadow:35 31 74}                                            /* RGB triple of the shadow colour */
+
+/* ==== 2. BASE ==== */
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
+/* Font per language (html[lang] is set by app.js) */
+html[lang=fa] body{font-family:'Vazirmatn',Tahoma,sans-serif}
+html[lang=en] body{font-family:'Outfit',system-ui,-apple-system,'Segoe UI',sans-serif}
+body{background:var(--bg);color:var(--ink);line-height:1.8;overflow-x:hidden;min-height:100vh}
+@supports (overflow:clip){body{overflow-x:clip}}                 /* clip keeps position:sticky working */
+img,svg{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit}
+ul,ol{padding:0}
+:focus-visible{outline:3px solid var(--acc);outline-offset:3px;border-radius:6px}
+.wrap{max-width:var(--w);margin-inline:auto;padding-inline:20px}
+/* "Skip to content" link: visible only while focused with the keyboard */
+.skip{position:absolute;inset-inline-start:12px;top:-80px;z-index:200;background:var(--acc);color:#fff;padding:8px 18px;border-radius:99px;font-weight:700;transition:top .2s}
+.skip:focus{top:10px}
+#page{display:block;min-height:50vh}
+:target{scroll-margin-top:104px}           /* keeps anchors (#products ...) clear of the floating header */
+
+/* ==== 3. HEADER ====
+   Floating glass bar (rounded, with a soft "thickness" shadow and a pastel colour line on top).
+   Web: logo | page links (icon disc + text) | Contact | language switch, all in ONE row.
+   Phone: row 1 = logo | Contact | language, row 2 = the four page links as a normal equal-width menu bar
+          (icon + text, underline marks the current page; no pills).
+   CONTROLS:  --hb-radius = corner roundness of the bar     --hb-bg = bar background (keep it a bit transparent for the glass effect) */
+:root{--hb-radius:30px;--hb-bg:#fffffff0}
+.p-home{--p1:#f1eeff;--p2:#e3deff;--edge:#c6bdf4;--pc:var(--acc);--pc-d:var(--acc-d);--pc-soft:var(--soft)}   /* Home link colours (the other pages use the category colours below, section 7) */
+#site-header{position:sticky;top:0;z-index:50;padding:10px 12px 0;color:var(--ink);pointer-events:none}   /* the gaps beside the bar stay clickable-through */
+.hbar{pointer-events:auto;position:relative;display:flex;align-items:center;gap:14px;max-width:var(--w);margin-inline:auto;padding:8px 14px;border-radius:var(--hb-radius);
+  background:var(--hb-bg);-webkit-backdrop-filter:saturate(1.5) blur(14px);backdrop-filter:saturate(1.5) blur(14px);border:1px solid #fff;
+  box-shadow:0 0 0 1px var(--line),0 6px 0 -1px var(--soft),0 20px 34px -20px rgb(var(--shadow) / .4);transition:padding .3s,box-shadow .3s}
+.hbar::before{content:'';position:absolute;inset:0 var(--hb-radius) auto;height:3px;border-radius:0 0 4px 4px;background:linear-gradient(90deg,var(--blush),var(--butter),var(--mint),var(--sky))}
+#site-header.stuck .hbar{padding-block:5px;box-shadow:0 0 0 1px var(--line),0 4px 0 -1px var(--soft),0 26px 36px -18px rgb(var(--shadow) / .5)}
+.logo{display:block;flex:none}
+.logo img{height:40px;width:auto;max-width:100%;object-fit:contain;transition:height .3s}
+#site-header.stuck .logo img{height:34px}
+html[dir=rtl] .logo img{object-position:right}
+/* Page links: icon + text. The icon is inline SVG from icons.js (IC.nav).
+   This part is only STRUCTURE. Every link carries its own colour (--pc, --p1, --p2, --edge from its .p-home / .p-albums / .p-newspapers / .p-bags class);
+   the colours and the hover effect are set separately for web, tablet and phone in 3b, 3c and 3d below. */
+.nav{display:flex;gap:2px;margin-inline:auto}
+.nav a{position:relative;display:flex;align-items:center;gap:9px;padding:4px 14px 4px 8px;padding-inline:8px 14px;border-radius:99px;font-weight:500;white-space:nowrap;transition:color .2s,background .2s}
+.ni{display:grid;place-items:center;flex:none}
+.nav .ic{width:20px;height:20px}
+.nav a.on{font-weight:700}
+.nav a::after{content:'';position:absolute;inset-inline:12px;bottom:-5px;height:3px;border-radius:3px;transform:scaleX(0);transition:transform .3s cubic-bezier(.3,1.4,.5,1)}
+.nav a.on::after{transform:scaleX(1)}
+.nav a:hover::after{transform:scaleX(.45)} .nav a.on:hover::after{transform:scaleX(1)}
+
+/* 3b. HEADER COLOURS + HOVER: WEB (1060px and wider)
+   Text, underline, icon and the round disc behind the icon all use the colour of that link's section.
+   Hover: the disc fills with the section's pastel and the icon tilts. Current page: raised disc with a thick edge. */
+@media (min-width:1060px){
+  .ni{width:36px;height:36px;border-radius:50%;transition:background .25s,transform .35s cubic-bezier(.3,1.6,.5,1),box-shadow .25s}
+  .nav a::after{background:var(--pc)}
+  .nav a:hover,.nav a.on{color:var(--pc)}
+  .nav a:hover .ni{background:var(--p1);transform:translateY(-2px) rotate(-8deg)}
+  .nav a.on .ni{background:var(--p2);box-shadow:0 3px 0 var(--edge)}
+}
+/* 3c. HEADER COLOURS + HOVER: TABLET (641px to 1059px)
+   Equal-width menu bar (no discs). Current page: text, icon and underline in the section colour.
+   Hover: the whole cell gets the section's pastel and the icon lifts. */
+@media (min-width:641px) and (max-width:1059px){
+  .nav a::after{background:var(--pc)}
+  .nav a:hover,.nav a.on{color:var(--pc)}
+  .nav a:hover{background:var(--p1)}
+  .nav a:hover .ni{transform:translateY(-2px)}
+  .nav a .ni{transition:transform .3s cubic-bezier(.3,1.6,.5,1)}
+}
+/* 3d. HEADER COLOURS + HOVER: PHONE (640px and narrower)
+   Same menu bar. Current page: text, icon and underline in the section colour. Touch feedback: a pastel flash while pressed.
+   (A real hover only exists on devices with a mouse, so it is limited to those.) */
+@media (max-width:640px){
+  .nav a::after{background:var(--pc)}
+  .nav a.on{color:var(--pc)}
+  .nav a:active{background:var(--p1)}
+}
+@media (max-width:640px) and (hover:hover){
+  .nav a:hover{color:var(--pc)}
+}
+.ci{flex:none;width:18px;height:18px}
+.hbar .cs{display:none} /* short contact label: only on small phones */
+/* Language switch: fixed LTR layout (Persian | English), knob slides to the active side */
+.sw{position:relative;display:grid;grid-template-columns:1fr 1fr;direction:ltr;border:1px solid var(--line);border-radius:99px;background:#fff;padding:2px;cursor:pointer;transition:border-color .2s}
+.sw:hover{border-color:var(--acc)}
+.sw::before{content:'';position:absolute;inset-block:2px;inset-inline-start:2px;width:calc(50% - 2px);border-radius:99px;background:var(--acc);transition:inset-inline-start .25s cubic-bezier(.3,1.4,.5,1)}
+.sw[aria-checked=true]::before{inset-inline-start:50%}
+.sw span{position:relative;display:grid;place-items:center;padding:3px 14px;font-size:.9rem;font-weight:600;transition:color .2s}
+.sw span:first-of-type{font-family:'Vazirmatn',sans-serif} .sw span:last-of-type{font-family:'Outfit',sans-serif}
+.sw[aria-checked=false] span:first-of-type,.sw[aria-checked=true] span:last-of-type{color:#fff}
+.sw[aria-checked=false]:hover span:last-of-type,.sw[aria-checked=true]:hover span:first-of-type{color:var(--acc)}
+
+/* ==== 4. BUTTONS (pressable, with a solid "thickness" under them) ==== */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--acc);color:#fff;font-weight:700;padding:7px 20px;border:0;border-radius:99px;cursor:pointer;
+  box-shadow:0 4px 0 var(--acc-d);transition:transform .2s,box-shadow .2s,background .2s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 6px 0 var(--acc-d),0 14px 18px -8px #4a3fd070}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--acc-d)}
+.btn.big{padding:12px 30px;font-size:1.05rem}
+.btn.ghost{background:#fff;color:var(--acc);box-shadow:0 4px 0 var(--line),inset 0 0 0 2px var(--line)}
+.btn.ghost:hover{box-shadow:0 6px 0 var(--line),inset 0 0 0 2px var(--acc)}
+.btn.ghost:active{box-shadow:0 1px 0 var(--line),inset 0 0 0 2px var(--acc)}
+.arw{width:18px;height:18px}
+html[dir=rtl] .arw{transform:scaleX(-1)}                          /* arrow points toward the reading direction */
+
+/* ==== 5. IMAGE PLACEHOLDER (shows expected path until the real image exists) ==== */
+.ph{position:relative;aspect-ratio:16/9;background:linear-gradient(135deg,var(--soft),#fff);border:2px dashed var(--line);border-radius:18px;display:grid;place-items:center;overflow:hidden}
+.ph::before{content:attr(data-path);font:12px/1.4 monospace;color:var(--mut);direction:ltr;padding:8px;text-align:center;word-break:break-all}
+.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+
+/* ==== 6. HOME: HERO ==== */
+.hero{position:relative;padding-block:clamp(20px,4vw,48px) clamp(40px,6vw,80px)}
+.hero-in{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(24px,5vw,72px);align-items:center}
+.hero-t h1{font-size:clamp(2.1rem,5.2vw,3.9rem);line-height:1.3;font-weight:800;letter-spacing:-.01em}
+html[lang=fa] .hero-t h1{line-height:1.5}
+.hero-t p{margin-top:16px;font-size:clamp(1rem,1.5vw,1.2rem);color:var(--mut);max-width:32em}
+.hero-cta{display:flex;flex-wrap:wrap;gap:16px;margin-top:30px}
+/* The 3D stage: arch-shaped photo frame + floating product pictures at different depths (see fx.css) */
+.hero-v{position:relative;padding:4% 8%}
+.stage{position:relative;width:min(100%,430px);aspect-ratio:4/5;margin-inline:auto}
+.arch-back{position:absolute;inset:7% -7% -5% 9%;border-radius:999px 999px 40px 40px;background:linear-gradient(160deg,var(--blush),var(--lilac) 70%)}
+.arch{position:absolute;inset:0;border-radius:999px 999px 36px 36px;overflow:hidden;border:7px solid #fff;background:var(--soft);
+  box-shadow:0 34px 60px -26px rgb(var(--shadow) / .55)}
+.arch .ph{position:absolute;inset:0;aspect-ratio:auto;border:0;border-radius:0;background:linear-gradient(160deg,#fff4f7,var(--lilac))}
+.fl{position:absolute;pointer-events:none}
+.fl .art{width:100%}
+.fl-album{width:44%;inset-inline-start:-17%;bottom:6%}
+.fl-news{width:38%;inset-inline-end:-16%;top:11%}
+.fl-bag{width:38%;inset-inline-end:-11%;bottom:-2%}
+.fl-card{width:46%;inset-inline-start:-18%;top:25%}
+.fl-moon{width:15%;inset-inline-start:-3%;top:4%}
+.fl-star{width:9%;inset-inline-end:8%;top:-3%}
+.fl-heart{width:10%;inset-inline-start:10%;bottom:-4%}
+@media (min-width:1000px) and (max-width:1279px){.hero-v{padding:4% 13%}}   /* large tablets / small laptops: two columns, keep the corner objects inside the screen */
+
+/* ==== 7. HOME: SECTION HEADINGS + CATEGORY CARDS ==== */
+.sec{padding-block:clamp(44px,7vw,88px)}
+.sh{margin-bottom:clamp(24px,4vw,40px)}
+.sh.c{text-align:center}
+.st{font-size:clamp(1.7rem,3.6vw,2.5rem);font-weight:800;line-height:1.45}
+.sub{margin-top:6px;color:var(--mut);font-size:1.05rem}
+.sh .sub{max-width:34em}
+.sh.c .sub{margin-inline:auto}
+/* Category colours: used by the header links, the product page banner, tags and the category card buttons.
+   --p1/--p2 = pastel pair, --edge = card thickness, --pc = strong accent (text, underline, active tag, button), --pc-d = its dark shade, --pc-soft = very pale tint */
+.p-albums{--p1:#ffe9ef;--p2:#ffc9d9;--edge:#f2a6bf;--pc:#d6336c;--pc-d:#a8234f;--pc-soft:#ffe3ec}
+.p-newspapers{--p1:#fff4cf;--p2:#ffe395;--edge:#ecc556;--pc:#9e6400;--pc-d:#744900;--pc-soft:#fff0c4}
+.p-bags{--p1:#e2f8ee;--p2:#b6ebd3;--edge:#82d0ae;--pc:#138a5e;--pc-d:#0d6845;--pc-soft:#d9f4e8}
+.p-cards{--p1:#e3f1ff;--p2:#bfdffc;--edge:#8cc2f0;--pc:#1f78c8;--pc-d:#175a98;--pc-soft:#dbeeff}
+.pcards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(18px,2.4vw,32px)}   /* 4 products: 4 columns on the web, 2 on tablets, 1 on phones */
+@media (max-width:1059px){.pcards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.pcard{position:relative;display:block;border-radius:34px;outline-offset:6px}
+.pc-tilt{position:relative;display:flex;flex-direction:column;border-radius:34px}
+.pc-plane{position:absolute;inset:0;border-radius:34px;background:#fff;overflow:hidden;
+  box-shadow:0 7px 0 var(--edge),0 28px 44px -22px rgb(var(--shadow) / .45)}
+.pc-stage{position:absolute;inset:0 0 auto;aspect-ratio:6/5;background:linear-gradient(150deg,var(--p1),var(--p2))}
+.pc-stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.pc-art{position:relative;aspect-ratio:6/5;display:grid;place-items:center}
+.pc-art .art{width:80%;height:auto}
+.pcard.has-img .pc-art{place-items:end}                           /* with a real cover photo the picture becomes a sticker in the corner */
+.pcard.has-img .pc-art .art{width:44%;margin:10px}
+.pc-info{position:relative;padding:18px 22px 24px}
+.pc-badge{position:absolute;inset-block-start:-24px;inset-inline-start:22px;width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:#fff;color:var(--pc);   /* icon colour = the colour of its own box */
+  box-shadow:0 4px 0 var(--edge),0 10px 16px -6px rgb(var(--shadow) / .4)}
+.pc-badge .ic{width:24px;height:24px}
+.pc-info h3{font-size:1.3rem;font-weight:800;margin-top:20px}
+.pc-info p{color:var(--mut);font-size:.95rem;margin-top:2px}
+.pc-go{display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding:6px 16px;border-radius:99px;background:var(--p1);color:var(--pc);font-weight:700;font-size:.92rem;box-shadow:inset 0 0 0 2px var(--p2);transition:background .2s,color .2s,box-shadow .2s}
+.pc-go .arw{transition:transform .25s}
+.pcard:hover .pc-go,.pcard:focus-visible .pc-go{background:var(--pc);color:#fff;box-shadow:0 4px 0 var(--pc-d)}   /* the button takes the card's own colour (rose / amber / green) */
+.pc-glare{position:absolute;inset:0;border-radius:34px;pointer-events:none}
+.pc-skel{position:absolute;inset:0;border-radius:34px;pointer-events:none}
+
+/* ==== 8. HOME: WHY DOMIM (bento: one big tile + three wide tiles, every tile has its own pastel + corner shape) ==== */
+.bento{display:grid;grid-template-columns:1.05fr 1fr;grid-template-rows:repeat(3,auto);gap:clamp(16px,2.4vw,26px)}
+.bt-w{display:flex}
+.bt-w.b1{grid-row:1/4}
+.bt{position:relative;flex:1;display:flex;align-items:center;gap:20px;padding:clamp(20px,3vw,30px);background:var(--bc);box-shadow:0 7px 0 var(--be),0 26px 40px -24px rgb(var(--shadow) / .4)}
+.bt h3{font-size:1.25rem;font-weight:800;line-height:1.5}
+.bt p{color:#4d4870;margin-top:2px}
+.bt-art .art{width:92px;height:92px;overflow:visible}
+.b1{--bc:#ffe4ec;--be:#f3b4c8}
+.b2{--bc:#fff1c8;--be:#eccb6b}
+.b3{--bc:#dcecff;--be:#a4c8f0}
+.b4{--bc:#d7f6e9;--be:#93d8bb}
+.b1 .bt{flex-direction:column;justify-content:center;text-align:center;padding:clamp(28px,5vw,56px) clamp(20px,4vw,40px);gap:26px;
+  border-start-start-radius:64px;border-start-end-radius:64px;border-end-end-radius:64px;border-end-start-radius:16px}
+.b1 .bt-art .art{width:min(250px,62vw);height:auto}
+.b1 h3{font-size:1.6rem}
+.b2 .bt{border-start-start-radius:16px;border-start-end-radius:36px;border-end-end-radius:36px;border-end-start-radius:36px}
+.b3 .bt{border-radius:36px;border-end-end-radius:16px}
+.b4 .bt{border-radius:36px;border-start-end-radius:16px}
+
+/* ==== 9. HOME: HOW TO ORDER (a path that fills while you scroll; nodes light up one by one) ==== */
+.flow{position:relative;--p:0}
+.flow ol{list-style:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;position:relative}
+.fs{text-align:center;position:relative}
+.node{position:relative;display:grid;place-items:center;width:84px;height:84px;margin:0 auto 14px;border-radius:50%;background:#fff;color:var(--mut);border:3px solid var(--line);
+  box-shadow:0 5px 0 var(--line);transition:background .4s,color .4s,border-color .4s,box-shadow .4s}
+.node .ic{width:36px;height:36px}
+.no{position:absolute;inset-block-start:-6px;inset-inline-end:-6px;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--hl);color:var(--ink);font-size:.85rem;font-weight:800;line-height:1;border:2px solid #fff}
+.fs.on .node{background:var(--acc);color:#fff;border-color:var(--acc);box-shadow:0 5px 0 var(--acc-d),0 18px 24px -10px #4a3fd080}
+.fs h3{font-size:1.1rem;font-weight:800}
+.fs p{color:var(--mut);font-size:.95rem;max-width:17em;margin-inline:auto}
+/* The path behind the nodes. Desktop = horizontal line; phones = vertical (see section 15) */
+.track,.fill{position:absolute;inset-block-start:39px;inset-inline:12.5%;height:6px;border-radius:6px}
+.track{background:repeating-linear-gradient(90deg,var(--line) 0 12px,transparent 12px 20px)}
+.fill{background:linear-gradient(90deg,var(--acc),#8d84ff);width:calc(var(--p) * 75%);inset-inline-end:auto}
+.fill::after{content:'';position:absolute;inset-inline-end:-8px;top:50%;width:18px;height:18px;margin-top:-9px;border-radius:50%;background:var(--hl);border:3px solid #fff;box-shadow:0 3px 8px #231f4a44}
+
+/* ==== 10. HOME: REVIEWS (a gallery of 16:9 screenshots that scrolls sideways; one total count + position bar) ==== */
+.rv{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;column-gap:6px}
+.rv-track{--g:clamp(14px,2vw,22px);grid-column:2;display:flex;gap:var(--g);overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;
+  padding:8px 4px 16px;-webkit-overflow-scrolling:touch;outline-offset:2px;cursor:grab}
+.rv-track.drag{cursor:grabbing;scroll-snap-type:none;scroll-behavior:auto;user-select:none}   /* while dragging with the mouse: no snapping, it settles on release */
+.rv-item img{pointer-events:none;-webkit-user-drag:none;user-select:none}
+.rv-track::-webkit-scrollbar{display:none}
+/* The arrow row is always laid out left-to-right (‹ on the left); only the track and the info line follow the page direction */
+.rv{direction:ltr}
+html[dir=rtl] .rv-track,html[dir=rtl] .rv-meta{direction:rtl}
+.rv-item{flex:0 0 calc((100% - 2 * var(--g)) / 3);scroll-snap-align:start}                /* desktop: 3 screenshots per view */
+.rv-item .ph{cursor:inherit;border-radius:18px;box-shadow:0 6px 0 var(--line),0 20px 28px -20px rgb(var(--shadow) / .45);transition:transform .3s,border-color .2s}
+.rv-item .ph:hover{border-color:var(--acc);transform:translateY(-5px)}
+.rv-item .ph:has(img){border-color:transparent}                                              /* real screenshot loaded: no dashed frame */
+.rv-arr{display:none;width:22px;height:44px;padding:0;border:0;background:none;color:var(--mut);font-size:2rem;line-height:1;cursor:pointer;place-items:center}
+.rv.ov .rv-arr{display:grid}
+.rv-arr:hover{color:var(--acc)}
+.rv-arr.off{visibility:hidden}
+.rv-arr.l{grid-column:1} .rv-arr.r{grid-column:3}
+.rv-meta{grid-column:1 / -1;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px;margin-top:4px;padding-inline:4px}
+.rv-count{font-weight:800;color:var(--ink)}
+.rv-hint{display:none;align-items:center;gap:6px;font-size:.88rem;color:var(--mut)}
+.rv.ov .rv-hint{display:inline-flex}
+.rv-ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.rv-bar{display:none;position:relative;flex:0 0 100%;height:22px;cursor:pointer;touch-action:none;user-select:none}   /* 22px tall so it is easy to grab; the visible line is thinner */
+.rv.ov .rv-bar{display:block}
+.rv-bar::before{content:"";position:absolute;inset-inline:0;top:8px;height:6px;border-radius:3px;background:var(--line);transition:top .15s,height .15s}
+.rv-bar b{position:absolute;top:8px;height:6px;border-radius:3px;background:var(--acc);transition:inset-inline-start .15s,width .15s,top .15s,height .15s}
+.rv-bar:hover::before,.rv-bar.drag::before{top:6px;height:10px}
+.rv-bar:hover b,.rv-bar.drag b{top:6px;height:10px}
+.rv-bar.drag b{transition:none}   /* the thumb follows the pointer exactly while it is dragged */
+
+/* ==== 11. HOME: FAQ (crib mobile on one side, animated accordion on the other) ==== */
+.faq-in{display:grid;grid-template-columns:minmax(200px,.62fr) 1.38fr;gap:clamp(24px,5vw,72px);align-items:start}
+.faq-art{position:sticky;top:120px}
+.faq-art .art{width:100%;max-width:300px;margin-inline:auto;overflow:visible}
+.acc{margin-top:22px}
+.ai{background:#fff;border:2px solid var(--line);border-radius:24px;margin-bottom:12px;transition:border-color .25s,box-shadow .25s}
+.ai.open{border-color:var(--acc);box-shadow:0 6px 0 var(--soft)}
+.ai h3{font-size:1rem;font-weight:800}
+.aq{display:flex;align-items:center;justify-content:space-between;gap:14px;width:100%;padding:16px 22px;background:none;border:0;cursor:pointer;text-align:start;font-weight:800;color:var(--ink)}
+.pm{position:relative;flex:none;width:30px;height:30px;border-radius:50%;background:var(--soft);transition:background .25s,transform .35s}
+.pm::before,.pm::after{content:'';position:absolute;inset:50% auto auto 50%;width:12px;height:2.5px;margin:-1.25px 0 0 -6px;border-radius:2px;background:var(--acc);transition:transform .3s,background .25s}
+.pm::after{transform:rotate(90deg)}
+.ai.open .pm{background:var(--acc);transform:rotate(180deg)}
+.ai.open .pm::before,.ai.open .pm::after{background:#fff}
+.ai.open .pm::after{transform:rotate(0)}
+/* Smooth open/close without measuring heights: grid row animates 0fr -> 1fr */
+.aa{display:grid;grid-template-rows:0fr;visibility:hidden;transition:grid-template-rows .35s ease,visibility 0s .35s}
+.ai.open .aa{grid-template-rows:1fr;visibility:visible;transition-delay:0s}
+.aa>div{overflow:hidden}
+.aa p{padding:0 22px 18px;color:var(--mut)}
+
+/* ==== 12. PRODUCT PAGES ==== */
+.pbanner{position:relative;margin-top:clamp(14px,3vw,30px);display:grid;grid-template-columns:1fr minmax(150px,290px);align-items:center;gap:20px;
+  padding:clamp(22px,4vw,46px) clamp(22px,5vw,60px);border-radius:48px;background:linear-gradient(135deg,var(--p1),var(--p2));
+  box-shadow:0 8px 0 var(--edge),0 30px 46px -26px rgb(var(--shadow) / .5)}
+.pt{font-size:clamp(2rem,5vw,3.4rem);font-weight:800;line-height:1.4}
+.pb-s{font-size:clamp(1rem,1.8vw,1.2rem);color:#4a4568}
+.pb-art .art{width:100%;height:auto}
+/* Tag rows (sub-category switcher) */
+.tg{margin-top:18px}
+.gl{font-size:.85rem;color:var(--mut);margin-bottom:6px}
+/* Tag rows never wrap: one row, horizontal scroll. Arrows sit OUTSIDE the row (own columns, safe gap).
+   .sc is forced LTR so arrows stay on their physical sides; the tags themselves follow the page direction. */
+.sc{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;direction:ltr}
+.tags{grid-column:2;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-block:4px 8px;-webkit-overflow-scrolling:touch}
+html[dir=rtl] .tags{direction:rtl}
+.tags::-webkit-scrollbar{display:none}
+.arr{display:none;width:22px;height:36px;padding:0;border:0;background:none;color:var(--mut);font-size:1.8rem;line-height:1;cursor:pointer;place-items:center}
+.sc.ov .arr{display:grid}
+.arr:hover{color:var(--pc,var(--acc))}
+.arr.off{visibility:hidden}
+.arr.l{grid-column:1;margin-right:6px} .arr.r{grid-column:3;margin-left:6px}
+.tag{padding:5px 18px;border:2px solid var(--line);border-radius:99px;background:#fff;white-space:nowrap;flex:none;cursor:pointer;-webkit-user-drag:none;transition:border-color .2s,transform .2s,background .2s,color .2s}
+/* Tag colours follow the page: .tg carries the page class (p-albums / p-newspapers / p-bags) = its --pc colours */
+.tag:hover{border-color:var(--pc,var(--acc));color:var(--pc,var(--acc));background:var(--pc-soft,#fff);transform:translateY(-2px)}
+.tag.on{background:var(--pc,var(--acc));border-color:var(--pc,var(--acc));color:#fff;font-weight:700;box-shadow:0 4px 0 var(--pc-d,var(--acc-d))}
+/* Tag rows can be dragged with the mouse (press and hold, then move): see js/scroll.js */
+.tags{cursor:grab;user-select:none}
+.tags.drag{cursor:grabbing}
+.tags.drag .tag{pointer-events:none}
+.tgh{margin-top:clamp(28px,5vw,52px);margin-bottom:clamp(8px,1.6vw,14px)}                    /* heading above a tag row when the page also has photo cards */
+.sb{font-size:.95rem;font-weight:400;color:var(--mut);margin:1px 0 22px}
+/* Big 16:9 photos: about 3 per row on desktop, 1 per row on phones (ratio comes from .ph) */
+.gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:clamp(18px,2.6vw,28px);perspective:1200px}
+.gal .ph{cursor:zoom-in;border-radius:22px;box-shadow:0 6px 0 var(--line),0 22px 30px -20px rgb(var(--shadow) / .45);transition:border-color .2s,transform .3s,box-shadow .3s}
+.gal .ph:hover{border-color:var(--acc);transform:translateY(-6px) rotateX(3deg) scale(1.02)}
+/* Showcase (e.g. Album Types): one BIG photo + a selector with equal options. Different from the tag pills on purpose:
+   the selector is a tab bar (numbered options in a rounded tray), and the frame is much larger than the design photos below. */
+.tsec{padding-bottom:0}
+.tsh{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:clamp(16px,2.4vw,26px)}
+.tsec .st{margin-bottom:0}
+.tsh{scroll-margin-top:130px}   /* an option link scrolls here, below the sticky header (2 rows on phones) */
+/* "2 of 4": shown only while the options scroll sideways (tablets / phones), class .ov is set by js/scroll.js */
+.cnt{display:none;flex:none;padding:3px 14px;border-radius:99px;background:var(--pc-soft);color:var(--pc);font-weight:800;font-size:.95rem;line-height:1.7;box-shadow:inset 0 0 0 2px var(--p2);white-space:nowrap}
+.tsec.ov .cnt{display:inline-block}
+.seg{display:grid;grid-template-columns:repeat(var(--n,4),minmax(0,1fr));gap:8px;padding:8px;border-radius:28px;background:#fff;box-shadow:inset 0 0 0 2px var(--line)}
+.seg-b{display:flex;align-items:center;justify-content:center;gap:10px;min-width:0;padding:12px 14px;border:0;border-radius:20px;background:transparent;font:inherit;font-weight:700;line-height:1.4;color:var(--ink);cursor:pointer;
+  transition:background .2s,color .2s,box-shadow .2s,transform .2s}
+.seg-b .sn{flex:none;display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--pc-soft);color:var(--pc);font-size:.85rem;font-weight:800;transition:background .2s,color .2s}
+.seg-b:hover{background:var(--pc-soft);color:var(--pc)}
+.seg-b.on{background:var(--pc);color:#fff;box-shadow:0 4px 0 var(--pc-d)}
+.seg-b.on .sn{background:#fff;color:var(--pc)}
+.show{margin:clamp(16px,2.4vw,24px) 0 0}
+.show .ph{cursor:zoom-in;border:4px solid var(--p2);border-radius:34px;box-shadow:0 8px 0 var(--edge),0 34px 50px -28px rgb(var(--shadow) / .55);animation:show-in .5s cubic-bezier(.2,.8,.2,1)}
+.show .ph:has(img){border-color:#fff}
+.show figcaption{margin-top:16px;padding-inline:8px;font-size:1.3rem;font-weight:800;color:var(--pc)}
+@keyframes show-in{from{opacity:0;transform:scale(.97)}}
+/* Tablets and phones (900px and narrower): the options stay in ONE row (like on the web) and the row scrolls sideways (swipe);
+   the chosen option is scrolled into view by js/app.js. A bit of the next option peeks in, so it is clear that the row scrolls. */
+@media (max-width:900px){
+  .seg{display:flex;gap:6px;overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
+  .seg::-webkit-scrollbar{display:none}
+  .seg-b{flex:none;white-space:nowrap;scroll-snap-align:center;padding:10px 16px}
+}
+/* Order box under the gallery */
+.octa{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-top:clamp(36px,6vw,64px);padding:clamp(22px,4vw,36px) clamp(22px,4vw,44px);
+  border-radius:36px;background:linear-gradient(135deg,var(--p1),var(--p2));box-shadow:0 7px 0 var(--edge)}
+.octa h2{font-size:1.4rem;font-weight:800}
+/* Contact button of the order box: same colours as the "view designs" buttons of the Home category cards (pale + section colour, fills on hover) */
+.octa .btn{flex:none;white-space:nowrap;background:var(--p1);color:var(--pc);box-shadow:inset 0 0 0 2px var(--p2)}
+.octa .btn:hover{background:var(--pc);color:#fff;box-shadow:0 4px 0 var(--pc-d)}
+.octa .btn:active{box-shadow:0 1px 0 var(--pc-d)}
+.octa p{color:#4a4568}
+/* ---- Order button -> messenger menu (speed dial). js/app.js: bindOrder. A tap squishes the button, sparkles + a ring burst out of it,
+   and the messengers (WhatsApp / Telegram / Bale = ORDER_CHANNELS in js/content.js) pop out one after another. ---- */
+.octa{position:relative;z-index:5}
+.ord{position:relative;display:inline-block;flex:none}
+.ord-btn .ic{transition:transform .6s cubic-bezier(.3,1.6,.5,1)}
+.ord.open .ord-btn .ic{transform:rotate(360deg) scale(1.15)}
+.ord-btn[aria-expanded=true]{background:var(--pc);color:#fff;box-shadow:0 4px 0 var(--pc-d)}     /* while the menu is open the button stays filled */
+.ord.fire .ord-btn{animation:ord-press .6s cubic-bezier(.3,1.6,.5,1)}
+@keyframes ord-press{0%{transform:scale(1)}25%{transform:scale(.9,.84)}55%{transform:scale(1.08,1.12)}100%{transform:scale(1)}}
+/* sparkles + ring (created by bindOrder, centred on the button, not clipped by it) */
+.ord-fx{position:absolute;left:50%;top:50%;width:0;height:0;pointer-events:none;z-index:40}
+.ord-fx::before{content:"";position:absolute;width:130px;height:130px;margin:-65px 0 0 -65px;border-radius:50%;border:3px solid var(--pc);opacity:0}
+.ord.fire .ord-fx::before{animation:ord-ring .8s ease-out}
+.ord-fx i{position:absolute;width:var(--s);height:var(--s);margin:calc(var(--s) / -2) 0 0 calc(var(--s) / -2);border-radius:50%;background:var(--c);opacity:0}
+.ord-fx i.star{border-radius:0;clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%);width:calc(var(--s) * 2);height:calc(var(--s) * 2);margin:calc(var(--s) * -1) 0 0 calc(var(--s) * -1)}
+.ord.fire .ord-fx i{animation:ord-burst .9s cubic-bezier(.15,.8,.3,1) forwards}
+@keyframes ord-ring{0%{transform:scale(.3);opacity:.9}100%{transform:scale(1.5);opacity:0}}
+@keyframes ord-burst{0%{transform:translate(0,0) scale(.4) rotate(0);opacity:1}70%{opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(1) rotate(180deg);opacity:0}}
+/* the menu: always opens upwards (js/app.js ensureRoom scrolls the page a little first when the button is too high on the screen) */
+.ord-menu{position:absolute;z-index:30;inset-inline-end:0;bottom:calc(100% + 14px);display:flex;flex-direction:column;gap:10px;align-items:stretch;min-width:max(100%,210px);
+  visibility:hidden;pointer-events:none;transition:visibility 0s .5s}
+.ord.open .ord-menu{visibility:visible;pointer-events:auto;transition-delay:0s}
+.ord-o,.ord-cap{opacity:0;transform:translateY(18px) scale(.55);transform-origin:center bottom;transition:opacity .2s,transform .35s ease,background .2s,box-shadow .2s}
+.ord.open .ord-o,.ord.open .ord-cap{--t:calc((4 - var(--i, 0)) * 70ms);   /* the item nearest to the button pops first */
+  opacity:1;transform:none;transition:opacity .3s var(--t),transform .6s cubic-bezier(.34,1.56,.64,1) var(--t),background .2s,box-shadow .2s}
+.ord-o{display:flex;align-items:center;gap:12px;padding:7px 22px 7px 7px;padding-inline:7px 22px;border-radius:99px;background:#fff;font-weight:800;white-space:nowrap;
+  box-shadow:0 14px 26px -12px rgb(40 30 80 / .55),inset 0 0 0 2px var(--p2);order:var(--i)}      /* top to bottom: WhatsApp, Telegram, Bale (the order of ORDER_CHANNELS) */
+.ord-o:hover,.ord-o:focus-visible{background:var(--p1);box-shadow:0 14px 26px -12px rgb(40 30 80 / .55),inset 0 0 0 2px var(--pc)}
+.ord-o .si{transition:transform .4s cubic-bezier(.3,1.6,.5,1)}
+.ord-o:hover .si{transform:rotate(-12deg) scale(1.12)}
+.octa .ord-cap{order:-1;align-self:stretch;margin:0;padding:3px 14px;border-radius:99px;background:var(--pc);color:#fff;text-align:center;font-size:.85rem;font-weight:800;line-height:1.7}
+@media (max-width:800px){                                   /* the order box is centred here: the menu opens centred above the button */
+  .ord-menu{inset-inline-end:auto;left:50%;translate:-50% 0}
+}
+
+/* ==== 13. LIGHTBOX (photo zoom) ==== */
+.lb{position:fixed;inset:0;z-index:100;background:#0a0814ee;display:grid;place-items:center;padding:64px 20px 24px;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.lb-img{max-width:min(1200px,100%);max-height:calc(100dvh - 90px);max-height:calc(100vh - 90px);object-fit:contain;border-radius:12px}
+.lb .ph{width:min(1100px,100%);cursor:default}
+.lb-x{position:absolute;top:calc(12px + env(safe-area-inset-top,0px));inset-inline-end:16px;width:44px;height:44px;padding:0;display:grid;place-items:center;border-radius:50%;border:0;background:#ffffff26;color:#fff;cursor:pointer;transition:background .2s}
+.lb-x svg{display:block;width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round}   /* a drawn cross (not a text character) = always exactly in the middle of the circle */
+.lb-x:hover{background:#ffffff55}
+
+/* ==== 14. FOOTER: night sky with moon and twinkling stars ==== */
+/* Footer: slanted top edge (its own --ft-* controls) */
+#site-footer{position:relative;isolation:isolate;color:#fff;margin-top:calc(var(--ft-slant) + 24px);padding-block:clamp(40px,6vw,64px) 0}
+#site-footer::before,#site-footer::after{content:'';position:absolute;inset:calc(-1 * var(--ft-slant)) 0 0;z-index:-2;transform:scaleX(calc(var(--ft-dir) * var(--m)))}
+#site-footer::before{background:var(--ft-edge);clip-path:polygon(0 var(--ft-slant),100% 0,100% 100%,0 100%)}
+#site-footer::after{background:var(--ft-bg);clip-path:polygon(0 calc(var(--ft-slant) + var(--ft-edge-w)),100% var(--ft-edge-w),100% 100%,0 100%)}
+.ft-sky{position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.ft-moon{position:absolute;inset-inline-end:7%;top:12%;width:clamp(60px,9vw,120px)}
+.ft-moon .art{width:100%}
+.ft{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:clamp(28px,5vw,64px)}
+.ft h2{font-size:clamp(1.6rem,3vw,2.2rem);font-weight:800;line-height:1.5}
+.ft-lead{color:#ffffffbb;margin-top:2px}
+/* Contact buttons: pressable glass pills, one brand colour per icon */
+.soc{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:24px;max-width:430px}
+.soc a{display:flex;align-items:center;gap:12px;padding:9px 14px;padding-inline:10px 14px;border-radius:20px;background:#ffffff1a;border:1px solid #ffffff30;
+  box-shadow:0 4px 0 #0000004d;font-weight:700;transition:transform .2s,background .2s,box-shadow .2s}
+.soc a:hover{transform:translateY(-3px);background:#ffffff2e;box-shadow:0 7px 0 #0000004d}
+.soc a:active{transform:translateY(3px);box-shadow:0 1px 0 #0000004d}
+.si{display:grid;place-items:center;flex:none;width:38px;height:38px;border-radius:50%;background:var(--acc)}
+.si img{width:22px;height:22px;object-fit:contain}
+.s-telegram .si{background:#2aabee} .s-whatsapp .si{background:#25b85a} .s-instagram .si{background:linear-gradient(45deg,#f9a733,#ee2a7b 55%,#6a3de8)} .s-bale .si{background:#3aa57a}
+.ft-col h3{font-size:1rem;font-weight:800;color:var(--hl);margin-bottom:12px}
+.ft-col ul{list-style:none;display:grid;gap:6px}
+.ft-col a{display:inline-block;padding:3px 0;color:#ffffffcc;transition:color .2s,transform .2s}
+.ft-col a:hover{color:#fff;transform:translateX(calc(4px * var(--m) * -1))}
+.ft-bot{margin-top:clamp(28px,4vw,44px);padding-top:18px;border-top:1px solid #ffffff22;text-align:center}
+#site-footer p{color:#fffa;font-size:.9rem}
+/* Designer credit: one thin line at the very bottom of the footer */
+.credit{position:relative;isolation:isolate;margin-top:calc(var(--cr-slant) + 24px);padding-block:12px calc(12px + env(safe-area-inset-bottom,0px));color:var(--cr-fg);font-size:.85rem;text-align:center}
+.credit::before,.credit::after{content:'';position:absolute;inset:calc(-1 * var(--cr-slant)) 0 0;z-index:-1;transform:scaleX(calc(var(--cr-dir) * var(--m)))}
+.credit::before{background:var(--cr-edge);clip-path:polygon(0 var(--cr-slant),100% 0,100% 100%,0 100%)}
+.credit::after{background:var(--cr-bg);clip-path:polygon(0 calc(var(--cr-slant) + var(--cr-edge-w)),100% var(--cr-edge-w),100% 100%,0 100%)}
+.credit a{display:inline-block;padding:4px 2px;font-weight:700;text-decoration:underline;text-underline-offset:3px;transition:color .2s}
+.credit a:hover{color:var(--hl)}
+/* Back-to-top button (created by fx.js) */
+.totop{position:fixed;z-index:60;inset-inline-end:max(16px,env(safe-area-inset-right,0px));bottom:max(16px,env(safe-area-inset-bottom,0px));width:48px;height:48px;border-radius:50%;border:0;display:grid;place-items:center;
+  background:var(--acc);color:#fff;cursor:pointer;box-shadow:0 4px 0 var(--acc-d),0 14px 20px -8px #4a3fd090;opacity:0;visibility:hidden;transform:translateY(16px) scale(.8);transition:opacity .3s,transform .3s,visibility 0s .3s}
+.totop.show{opacity:1;visibility:visible;transform:none;transition-delay:0s}
+.totop:active{transform:translateY(3px);box-shadow:0 1px 0 var(--acc-d)}
+.totop .ic{width:24px;height:24px}
+
+/* ==== 15. RESPONSIVE ==== */
+/* Tablet / small laptop */
+@media (max-width:980px){
+  .hero-in{grid-template-columns:1fr;text-align:center}
+  .hero-t p{margin-inline:auto}
+  .hero-cta{justify-content:center}
+  .hero-v{order:2;padding:6% 12%}
+  .stage{width:min(100%,380px)}
+  .bento{grid-template-columns:1fr}
+  .bt-w.b1{grid-row:auto}
+  .faq-in{grid-template-columns:1fr}
+  .faq-art{position:static}
+  .faq-art .art{max-width:190px}
+  .ft{grid-template-columns:1fr 1fr}
+  .ft-main{grid-column:1/-1}
+}
+/* Tablet + phone header (<= 1059px): row 1 = logo (start) | Contact Us (exact centre) | language switch (end);
+   row 2 = the four page links as an equal-width menu bar (icon + text, underline = current page) */
+@media (max-width:1059px){
+  #site-header{padding:8px 8px 0}
+  :target{scroll-margin-top:132px}
+  .hbar{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:4px 8px;padding:8px 12px 0;border-radius:24px}
+  .hbar::before{inset-inline:26px}
+  #site-header.stuck .hbar{padding-block:5px 0}
+  .logo{grid-column:1;grid-row:1;min-width:0;justify-self:start} .logo img,#site-header.stuck .logo img{height:30px}
+  .hbar .btn{grid-column:2;grid-row:1;min-height:36px;padding:0 14px;font-size:.9rem}
+  .sw{grid-column:3;grid-row:1;justify-self:end;min-height:36px} .sw span{padding:0 10px;font-size:.8rem}
+  .nav{grid-column:1/-1;grid-row:2;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;margin:4px -4px 0;border-top:1px solid var(--soft)}
+  .nav a{justify-content:center;gap:6px;min-width:0;padding:10px 2px 12px;border-radius:0;font-size:.88rem}
+  .nav .ic{width:18px;height:18px}
+  .nav a::after{inset-inline:16%;bottom:0}
+}
+/* Phones: page cards, order path, reviews ... */
+@media (max-width:800px){
+  :root{--ft-slant:var(--ft-slant-m);--cr-slant:var(--cr-slant-m)}
+  /* category cards: one per row */
+  .pcards{grid-template-columns:1fr;max-width:420px;margin-inline:auto}
+  /* order path turns vertical */
+  .flow ol{grid-template-columns:1fr;gap:26px}
+  .fs{display:grid;grid-template-columns:84px 1fr;gap:16px;text-align:start;align-items:center}
+  .node{margin:0}
+  .fs p{margin-inline:0}
+  .track,.fill{inset-block:42px;inset-inline:auto;inset-inline-start:39px;width:6px;height:auto}
+  .track{background:repeating-linear-gradient(180deg,var(--line) 0 12px,transparent 12px 20px)}
+  .fill{background:linear-gradient(180deg,var(--acc),#8d84ff);width:6px;height:calc(var(--p) * (100% - 84px));inset-block-end:auto}
+  .fill::after{inset-inline-end:auto;inset-inline-start:50%;margin-inline-start:-9px;top:auto;bottom:-8px;margin-top:0}
+  .pbanner{grid-template-columns:1fr;text-align:center;border-radius:36px}
+  .pb-art{max-width:200px;margin-inline:auto;order:-1}
+  .octa{text-align:center;justify-content:center}
+}
+@media (max-width:1000px){.rv-item{flex-basis:calc((100% - var(--g)) / 2)}}   /* tablet: 2 per view */
+@media (max-width:640px){
+  .show .ph{border-radius:24px}
+  .rv-item{flex-basis:86%}   /* phone: one screenshot with the next one peeking in, so the row clearly scrolls */
+  .ft{grid-template-columns:1fr 1fr;gap:24px 14px}   /* phones: Products and Popular stay side by side, like on the web */
+  .soc{max-width:none}
+    .hero-v{padding:6% 16%}   /* a little more side room: the four objects at the corners of the hero image must stay inside the screen */
+}
+@media (max-width:420px){.wrap{padding-inline:14px}}
+@media (max-width:430px){.hbar .lg{display:none}.hbar .cs{display:inline}
+  .hbar .btn{padding:0 11px;font-size:.84rem;gap:6px} .sw span{padding:0 7px;font-size:.74rem}   /* short label so the centred button fits */
+  .nav a{gap:4px;font-size:.8rem} .nav .ic{width:16px;height:16px}
+  html[lang=en] .nav a{flex-direction:column;gap:1px;padding:7px 0 10px;font-size:.72rem}}   /* English labels are longer: icon above text */
+@media (max-width:359px){.nav a{flex-direction:column;gap:1px;padding:7px 0 10px;font-size:.74rem} html[lang=en] .nav a{font-size:.68rem}}   /* very small phones: icon above text */
+@media (max-width:369px){.hbar .cs{display:none}.hbar .btn{width:40px;padding:0;border-radius:50%}.hbar .ci{width:20px;height:20px}}   /* very small phones: Contact becomes a round chat icon (its aria-label stays) */
+@media (max-width:339px){.sw span{padding:0 5px;font-size:.7rem}} /* tiny phones (320px) */
+
+/* ---- Five menu links (Home + 4 product pages) ---- */
+/* web, narrower laptops: a little less room around each link so the whole header still fits in one row */
+@media (min-width:1060px) and (max-width:1320px){
+  .nav a{padding:4px 9px 4px 5px;gap:6px;font-size:.93rem}
+  .nav .ic{width:19px;height:19px}
+}
+/* phones: five equal columns, the icon sits above the text (as many words are longer than a column) */
+@media (max-width:640px){
+  .nav a{flex-direction:column;gap:2px;padding:8px 0 11px;font-size:.78rem;line-height:1.35}
+  .nav .ic{width:20px;height:20px}
+}
