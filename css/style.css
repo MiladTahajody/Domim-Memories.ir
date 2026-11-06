@@ -154,11 +154,14 @@ html[dir=rtl] .logo img{object-position:right}
 .ci{flex:none;width:18px;height:18px}
 .hbar .cs{display:none} /* short contact label: only on small phones */
 /* Language switch: fixed LTR layout (Persian | English), knob slides to the active side */
-.sw{position:relative;display:grid;grid-template-columns:1fr 1fr;direction:ltr;border:1px solid var(--line);border-radius:99px;background:#fff;padding:2px;cursor:pointer;transition:border-color .2s}
+.sw{position:relative;display:inline-flex;align-items:stretch;direction:ltr;margin:0;box-sizing:border-box;border:1px solid var(--line);border-radius:99px;background:#fff;padding:2px;cursor:pointer;transition:border-color .2s;
+  -webkit-appearance:none;appearance:none;font:inherit;line-height:1;color:inherit}
+/* ^ Safari (iPhone) draws a <button> with its own padding / margin / vertical centring and is unreliable with display:grid on buttons:
+     so the switch is a plain flex box, the native button look is switched off, and both labels sit in two equal flex cells */
 .sw:hover{border-color:var(--acc)}
 .sw::before{content:'';position:absolute;inset-block:2px;inset-inline-start:2px;width:calc(50% - 2px);border-radius:99px;background:var(--acc);transition:inset-inline-start .25s cubic-bezier(.3,1.4,.5,1)}
 .sw[aria-checked=true]::before{inset-inline-start:50%}
-.sw span{position:relative;display:grid;place-items:center;padding:3px 14px;font-size:.9rem;font-weight:600;transition:color .2s}
+.sw span{position:relative;display:flex;align-items:center;justify-content:center;flex:1 1 0;min-width:0;text-align:center;line-height:1.6;padding:3px 14px;font-size:.9rem;font-weight:600;transition:color .2s}
 .sw span:first-of-type{font-family:'Vazirmatn',sans-serif} .sw span:last-of-type{font-family:'Outfit',sans-serif}
 .sw[aria-checked=false] span:first-of-type,.sw[aria-checked=true] span:last-of-type{color:#fff}
 .sw[aria-checked=false]:hover span:last-of-type,.sw[aria-checked=true]:hover span:first-of-type{color:var(--acc)}
@@ -407,7 +410,7 @@ html[dir=rtl] .tags{direction:rtl}
 .octa p{color:#4a4568}
 /* ---- Order button -> messenger menu (speed dial). js/app.js: bindOrder. A tap squishes the button, sparkles + a ring burst out of it,
    and the messengers (WhatsApp / Telegram / Bale = ORDER_CHANNELS in js/content.js) pop out one after another. ---- */
-.octa{position:relative;z-index:5}
+.octa{position:relative;z-index:5;overflow-x:clip}   /* sparkles / ring can never widen the page (that made tablets shake and zoom); vertically the menu may still pop out */
 .ord{position:relative;display:inline-block;flex:none}
 .ord-btn .ic{transition:transform .6s cubic-bezier(.3,1.6,.5,1)}
 .ord.open .ord-btn .ic{transform:rotate(360deg) scale(1.15)}
