@@ -1,0 +1,9 @@
+# robots.txt - tells search engines what they may visit.
+# Put this file in the ROOT of your website (next to index.html).
+# REPLACE the domain below with your real one.
+User-agent: *
+Allow: /
+# Help file for the site owner: keep it out of search results
+Disallow: /guide.html
+
+Sitemap: https://domim-memories.ir/sitemap.xml
