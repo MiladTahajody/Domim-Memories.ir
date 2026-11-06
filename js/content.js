@@ -51,7 +51,7 @@ const PRODUCTS = {
       { title: { fa: 'طرح‌های آلبوم', en: 'Album Designs' }, items: [
         ['girls',                'دخترانه',            'Girls', 4],
         ['boys',                 'پسرانه',             'Boys', 3],
-        ['pregnancy',            'بارداری',            'Pregnancy', 12],
+        ['pregnancy',            'بارداری',            'Pregnancy', 2],
         ['girls-boys',           'دختر و پسر',         'Girls-Boys', 4],
         ['adult',                'بزرگسال',            'Adult', 3],
         ['family',               'خانواده',            'Family', 4],

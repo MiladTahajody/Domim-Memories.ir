@@ -281,9 +281,13 @@ const ensureRoom = ord => {
 function bindOrder(ord) {
   const btn = ord.querySelector('.ord-btn'), fx = ord.querySelector('.ord-fx');
   const burst = () => {                                           // 14 sparkles flying outwards from the button centre
+    // never let a sparkle leave the order box sideways: that would widen the page for a moment (tablets shook and zoomed)
+    const box = (ord.closest('.octa') || ord).getBoundingClientRect(), bc = btn.getBoundingClientRect().left + btn.offsetWidth / 2;
+    const room = {l: Math.max(0, bc - box.left - 14), r: Math.max(0, box.right - bc - 14)};
+    const clampX = x => Math.round(Math.max(-room.l, Math.min(room.r, x)));
     fx.innerHTML = Array.from({length: 14}, (_, i) => {
       const ang = (i / 14) * Math.PI * 2 + (i % 2 ? .2 : 0), dist = 70 + (i % 3) * 26;
-      return `<i class="${i % 3 === 0 ? 'star' : ''}" style="--dx:${Math.round(Math.cos(ang) * dist)}px;--dy:${Math.round(Math.sin(ang) * dist)}px;--s:${6 + (i % 4) * 2}px;--c:${['var(--pc)', 'var(--p2)', '#ffd66b', '#fff'][i % 4]}"></i>`;
+      return `<i class="${i % 3 === 0 ? 'star' : ''}" style="--dx:${clampX(Math.cos(ang) * dist)}px;--dy:${Math.round(Math.sin(ang) * dist)}px;--s:${6 + (i % 4) * 2}px;--c:${['var(--pc)', 'var(--p2)', '#ffd66b', '#fff'][i % 4]}"></i>`;
     }).join('');
     ord.classList.remove('fire'); void ord.offsetWidth; ord.classList.add('fire');   // restart the CSS animations
   };
@@ -334,6 +338,7 @@ function render(keepScroll = false) {
   if (typeof FX !== 'undefined') FX.init();                        // start animations for the freshly built page
 }
 render();
+document.documentElement.classList.remove('boot');   // the real page is built: show it (see the <style> + <script> in the <head> of every page)
 // Opened with a link such as index.html#contact: the content did not exist yet when the browser tried to jump, so jump now
 // A link with a # (albums.html#framed, index.html#faq) scrolls to its target. An option link scrolls to the title row of its section (title + counter), below the sticky header.
 // It is repeated shortly after the page has loaded, because the page height changes while the fonts load.
