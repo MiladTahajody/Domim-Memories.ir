@@ -1,18 +1,7 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-BWYSEJSVLX"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-BWYSEJSVLX');
-</script>
-
 <meta charset="utf-8">
-<meta name="google" content="notranslate">
 <!-- =====================================================================
      Domim | index.html
      Every page is the same small shell: the visible content (header, sections, footer) is built by
@@ -60,50 +49,12 @@
 <link rel="preload" href="fonts/Vazirmatn-Variable.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/Outfit-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
 <!-- css/style.css = layout + components, css/fx.css = motion, 3D and the animated background -->
+<!-- First paint: until js/app.js has built the page, show only the plain page colour (no half-built page, background shapes or footer flash).
+     The class "boot" is removed by js/app.js right after the first render (and by a 3-second safety timer). Without JavaScript nothing is hidden. -->
+<style>html.boot{background:#faf8ff}html.boot body{opacity:0}</style>
+<script>(function(){var d=document.documentElement;d.classList.add('boot');setTimeout(function(){d.classList.remove('boot')},3000)})();</script>
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/fx.css">
-
-<!-- Statsfa Website Analytics Start -->
-<script data-host="https://statsfa.com" data-dnt="false" src="https://statsfa.com/js/script.js" id="ZwSg9rf6GA" async defer></script>
-<!-- Statsfa Website Analytics End -->
-
-<script>
-        (function() {
-            document.addEventListener("contextmenu", function(e) {
-                e.preventDefault();
-            });
-            document.addEventListener("keydown", function(e) {
-                const key = e.key;
-                const ctrl = e.ctrlKey || e.metaKey;
-                const shift = e.shiftKey;
-                if (ctrl && key === "u") {
-                    e.preventDefault();
-                    return;
-                }
-                if (key === "F12") {
-                    e.preventDefault();
-                    return;
-                }
-                if (ctrl && shift && key === "I") {
-                    e.preventDefault();
-                    return;
-                }
-                if (ctrl && shift && key === "J") {
-                    e.preventDefault();
-                    return;
-                }
-                if (ctrl && shift && key === "C") {
-                    e.preventDefault();
-                    return;
-                }
-                if (ctrl && key === "s") {
-                    e.preventDefault();
-                    return;
-                }
-            });
-        })();
-</script>
-
 </head>
 <body data-page="home">
 <!-- Animated background: soft colour washes + floating clouds, balloons, stars, moons and hearts (the shapes are added by js/fx.js) -->
