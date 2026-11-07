@@ -152,16 +152,16 @@ const FX = (() => {
     frame();
   }
 
-  /* ---- Page-leave animation (only where the browser has no cross-document view transitions) ---- */
+  /* ---- Page-leave fade (only computers with a mouse, and only where the browser has no cross-document view transitions; touch devices just navigate) ---- */
   const hasVT = 'CSSViewTransitionRule' in window;
   document.addEventListener('click', e => {
-    if (!on || hasVT || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    if (!on || hasVT || !window.matchMedia('(hover:hover) and (pointer:fine)').matches || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
     const a = e.target.closest && e.target.closest('a[href]');
     if (!a || a.target || a.hasAttribute('download')) return;
     const u = new URL(a.href, location.href);
     if (u.origin !== location.origin || u.pathname === location.pathname) return;       // only real page changes
     e.preventDefault(); root.classList.add('leaving');
-    setTimeout(() => { location.href = a.href; }, 210);
+    setTimeout(() => { location.href = a.href; }, 190);
   });
   window.addEventListener('pageshow', () => root.classList.remove('leaving'));          // coming back with the Back button
 

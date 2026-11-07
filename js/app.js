@@ -285,6 +285,7 @@ function bindOrder(ord) {
     const box = (ord.closest('.octa') || ord).getBoundingClientRect(), bc = btn.getBoundingClientRect().left + btn.offsetWidth / 2;
     const room = {l: Math.max(0, bc - box.left - 14), r: Math.max(0, box.right - bc - 14)};
     const clampX = x => Math.round(Math.max(-room.l, Math.min(room.r, x)));
+    ord.style.setProperty('--rk', Math.max(.5, Math.min(1.5, (Math.min(room.l, room.r) + 14) / 65)).toFixed(2));   // the ring (65px radius) also grows only as far as the box allows
     fx.innerHTML = Array.from({length: 14}, (_, i) => {
       const ang = (i / 14) * Math.PI * 2 + (i % 2 ? .2 : 0), dist = 70 + (i % 3) * 26;
       return `<i class="${i % 3 === 0 ? 'star' : ''}" style="--dx:${clampX(Math.cos(ang) * dist)}px;--dy:${Math.round(Math.sin(ang) * dist)}px;--s:${6 + (i % 4) * 2}px;--c:${['var(--pc)', 'var(--p2)', '#ffd66b', '#fff'][i % 4]}"></i>`;
