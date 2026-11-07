@@ -67,10 +67,10 @@ const PRODUCTS = {
   cards: {                       // key = page name: cards.html (menu word: TEXT nav.cards); photos in card/<tag>/<tag>-1.webp ...
     folder: 'card',
     groups: [{ title: null, items: [
-      ['teddy-girl', 'کارت ماه‌گرد تدی دخترانه',   'Girl Teddy Moon Card', 3],
-      ['teddy-boy',  'کارت ماه‌گرد تدی پسرانه',    'Boy Teddy Moon Card', 3],
-      ['baby',       'کارت ماه‌گرد نی‌نی کوچولو',  'Little Baby Moon Card', 3],
-      ['animals',    'کارت ماه‌گرد حیوانات',       'Animals Moon Card', 3]
+      ['teddy-girl', 'کارت ماه‌گرد تدی دخترانه',   'Girl Teddy Moon Card', 1],
+      ['teddy-boy',  'کارت ماه‌گرد تدی پسرانه',    'Boy Teddy Moon Card', 1],
+      ['baby',       'کارت ماه‌گرد نی‌نی کوچولو',  'Little Baby Moon Card', 1],
+      ['animals',    'کارت ماه‌گرد حیوانات',       'Animals Moon Card', 1]
     ]}]
   },
   newspapers: {
