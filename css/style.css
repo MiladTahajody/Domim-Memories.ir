@@ -517,7 +517,7 @@ html[dir=rtl] .tags{direction:rtl}
   .hbar::before{inset-inline:26px}
   #site-header.stuck .hbar{padding-block:5px 0}
   .logo{grid-column:1;grid-row:1;min-width:0;justify-self:start} .logo img,#site-header.stuck .logo img{height:30px}
-  .hbar .btn{grid-column:2;grid-row:1;min-height:36px;padding:0 14px;font-size:.9rem}
+  .hbar .btn{grid-column:2;grid-row:1;min-height:34px;padding:0 14px;font-size:.9rem}
   .sw{grid-column:3;grid-row:1;justify-self:end;min-height:36px} .sw span{padding:0 10px;font-size:.8rem}
   .nav{grid-column:1/-1;grid-row:2;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;margin:4px -4px 0;border-top:1px solid var(--soft)}
   .nav a{justify-content:center;gap:6px;min-width:0;padding:10px 2px 12px;border-radius:0;font-size:.88rem}
