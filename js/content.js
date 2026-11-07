@@ -34,7 +34,10 @@ const CREDIT_LINK = 'https://t.me/milad_tahajody';
 //            (e.g. 4 for "girls" means album/girls/girls-1.webp ... girls-4.webp)
 //   photos = a list    -> your own file names, e.g. ['a.webp', 'b.webp']
 // A group can have  display: 'showcase'  : instead of tags it shows ONE big photo with a selector of its rows (clicking an option shows that
-// row's photo; only the FIRST photo of each row is used). It sits above the tag rows (used for "Album Types").
+// row's photo; only the FIRST photo of each row is used). The groups are shown in the order they are written here: a showcase written
+// AFTER the tag group comes below the tags + photos, written BEFORE it comes above them (Albums: designs first, then "Album Types").
+// Option  dir: 'types'  on a showcase group puts all its photos in ONE folder (album/types/) named <id>-<position>.webp
+// (nostalgia-1.webp, journal-2.webp, drymount-3.webp, framed-4.webp); without dir every row has its own folder like the tags.
 // Groups without it are tags that open their photos below.
 // To add a product: add a row. To remove one: delete its row. Rows show in the order written.
 // Optional cover picture of each category card on Home: <folder>/<folder>-cover.webp (e.g. album/album-cover.webp)
@@ -42,12 +45,6 @@ const PRODUCTS = {
   albums: {
     folder: 'album',                 // image folder in the project root
     groups: [                        // each group = one row of tags (shown top to bottom)
-      { title: { fa: 'انواع آلبوم', en: 'Album Types' }, display: 'showcase', items: [   // display:'showcase' = ONE big photo + a 4-option selector (ONE photo per option), not tags
-        ['nostalgia',     'نوستالژی', 'Nostalgia', 1],
-        ['journal', 'ژورنالی',   'Journal', 1],
-        ['drymount',   'شومیزی',            'DryMount', 1],
-        ['framed',        'فریم دار',            'Framed', 1]
-      ]},
       { title: { fa: 'طرح‌های آلبوم', en: 'Album Designs' }, items: [
         ['girls',                'دخترانه',            'Girls', 56],
         ['boys',                 'پسرانه',             'Boys', 54],
@@ -61,16 +58,22 @@ const PRODUCTS = {
         ['animation', 'انیمیشن', 'Animation', 14],
         ['wedding',              'عروسی',              'Wedding', 15],
         ['events',               'مناسبتی',          'Events', 2]
+      ]},
+      { title: { fa: 'انواع آلبوم', en: 'Album Types' }, display: 'showcase', dir: 'types', items: [   // display:'showcase' = ONE big photo + a selector (ONE photo per option), not tags; dir:'types' = all these photos are in ONE folder: album/types/<id>-<position>.webp
+        ['nostalgia',     'نوستالژی', 'Nostalgia', 1],
+        ['journal', 'ژورنالی',   'Journal', 1],
+        ['drymount',   'شومیزی',            'DryMount', 1],
+        ['framed',        'فریم دار',            'Framed', 1]
       ]}
     ]
   },
   cards: {                       // key = page name: cards.html (menu word: TEXT nav.cards); photos in card/<tag>/<tag>-1.webp ...
     folder: 'card',
     groups: [{ title: null, items: [
-      ['teddy-girl', 'کارت ماه‌گرد تدی دخترانه',   'Girl Teddy Moon Card', 1],
-      ['teddy-boy',  'کارت ماه‌گرد تدی پسرانه',    'Boy Teddy Moon Card', 1],
-      ['baby',       'کارت ماه‌گرد نی‌نی کوچولو',  'Little Baby Moon Card', 1],
-      ['animals',    'کارت ماه‌گرد حیوانات',       'Animals Moon Card', 1]
+      ['teddy-girl', 'کارت ماه‌گرد تدی دخترانه',   'Girl Teddy Moon Card', 3],
+      ['teddy-boy',  'کارت ماه‌گرد تدی پسرانه',    'Boy Teddy Moon Card', 3],
+      ['baby',       'کارت ماه‌گرد نی‌نی کوچولو',  'Little Baby Moon Card', 3],
+      ['animals',    'کارت ماه‌گرد حیوانات',       'Animals Moon Card', 3]
     ]}]
   },
   newspapers: {

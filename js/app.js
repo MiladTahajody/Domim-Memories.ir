@@ -29,6 +29,8 @@ const FILE = { home: '', albums: 'albums.html', newspapers: 'newspapers.html', b
 const num = n => lang === 'fa' ? n.toLocaleString('fa-IR', {useGrouping: false}) : String(n);
 const allRows = key => PRODUCTS[key].groups.flatMap(g => g.items);       // every product row of a page
 const tagRowsOf = key => PRODUCTS[key].groups.filter(g => g.display !== 'showcase').flatMap(g => g.items);   // rows shown as TAGS (not as photo cards)
+// Photo path of one option of a showcase (Album Types): with dir (g.dir) all options share one folder and the file is <id>-<position>.webp
+const showPath = (key, g, r) => `${PRODUCTS[key].folder}/${g.dir || r[0]}/${Array.isArray(r[3]) ? r[3][0] : (g.dir ? `${r[0]}-${g.items.indexOf(r) + 1}.webp` : filesOf(r, r[0])[0])}`;
 const filesOf = (row, id) => Array.isArray(row[3]) ? row[3] : Array.from({length: row[3]}, (_, i) => `${id}-${i + 1}.webp`);   // photo file names of a row
 const nameOf = row => row[lang === 'fa' ? 1 : 2];                          // product name in the current language
 
@@ -148,7 +150,7 @@ const product = (t, key) => {
   const arrows = lang === 'fa' ? ['حرکت به چپ', 'حرکت به راست'] : ['Scroll left', 'Scroll right'];
 
   // Showcase (e.g. Album Types): ONE big photo and a selector; the selected option decides the photo (see selectType below)
-  const showPh = (r, g) => ph(`${p.folder}/${r[0]}/${filesOf(r, r[0])[0]}`, `${nameOf(r)} - ${t.nav[key]}`, 'lazy');
+  const showPh = (r, g) => ph(showPath(key, g, r), `${nameOf(r)} - ${t.nav[key]}`, 'lazy');
   const cards = cardGroups.map((g, gi) => {
     const cur = g.items.find(r => r[0] === typeId) || g.items[0];
     return `<section class="sec tsec p-${key}" aria-labelledby="tc-h${gi}"><div class="tsh">${g.title ? `<h2 class="st" id="tc-h${gi}">${g.title[lang]}</h2>` : '<span></span>'}<span class="cnt" aria-live="polite"></span></div>
@@ -169,14 +171,19 @@ const product = (t, key) => {
   // The order button opens a small menu of messengers (ORDER_CHANNELS in js/content.js, addresses = LINKS, same as the footer); see bindOrder below
   const channels = (typeof ORDER_CHANNELS !== 'undefined' ? ORDER_CHANNELS : []).filter(n => LINKS[n]);
 
+  // The groups come in the order they are written in PRODUCTS: a showcase written before the tag group is shown above the tags + photos,
+  // written after it (Albums) it is shown below them. The order box is always the last block of the page.
+  const showcaseAfter = cardGroups.length > 0 && p.groups.findIndex(g => g.display === 'showcase') > p.groups.findIndex(g => g.display !== 'showcase');
+  const octa = `<aside class="octa p-${key}" data-rv><div><h2>${cta[0]}</h2><p>${cta[1]}</p></div><div class="ord"><button class="btn big ord-btn" type="button" aria-haspopup="true" aria-expanded="false">${IC.nav[key]}<span>${cta[2] || t.contact}</span></button><i class="ord-fx" aria-hidden="true"></i>
+        <div class="ord-menu" role="group" aria-label="${t.orderVia}">${channels.map((n, i) => `<a class="ord-o s-${n}" style="--i:${i + 1}" href="${LINKS[n]}" target="_blank" rel="noopener noreferrer"><span class="si"><img src="icons/${n}.svg" alt="" width="22" height="22"></span><span>${t.social[n]}</span></a>`).join('')}<p class="ord-cap" aria-hidden="true">${t.orderVia}</p></div></div></aside>`;
+
   return `<div class="wrap">
     <section class="pbanner p-${key}" data-tilt="6"><div class="pb-t"><h1 class="pt">${t.nav[key]}</h1><p class="pb-s">${t.categoryText[key]}</p></div>
       <div class="pb-art">${ART[key]()}</div></section>
-    ${cards}
+    ${showcaseAfter ? '' : cards}
     ${tagRows}
-    <section class="sec"><h2 class="st">${name}</h2><h3 class="sb">${t.categoryText[key]}</h3><div class="gal">${photos}</div>
-      <aside class="octa p-${key}" data-rv><div><h2>${cta[0]}</h2><p>${cta[1]}</p></div><div class="ord"><button class="btn big ord-btn" type="button" aria-haspopup="true" aria-expanded="false">${IC.nav[key]}<span>${cta[2] || t.contact}</span></button><i class="ord-fx" aria-hidden="true"></i>
-        <div class="ord-menu" role="group" aria-label="${t.orderVia}">${channels.map((n, i) => `<a class="ord-o s-${n}" style="--i:${i + 1}" href="${LINKS[n]}" target="_blank" rel="noopener noreferrer"><span class="si"><img src="icons/${n}.svg" alt="" width="22" height="22"></span><span>${t.social[n]}</span></a>`).join('')}<p class="ord-cap" aria-hidden="true">${t.orderVia}</p></div></div></aside></section></div>`;
+    <section class="sec"><h2 class="st">${name}</h2><h3 class="sb">${t.categoryText[key]}</h3><div class="gal">${photos}</div>${showcaseAfter ? '' : octa}</section>
+    ${showcaseAfter ? cards + octa : ''}</div>`;
 };
 
 
@@ -257,7 +264,7 @@ function selectType(seg, id) {
   const row = g && g.items.find(r => r[0] === id); if (!row) return;
   typeId = id;
   seg.querySelectorAll('.seg-b').forEach(b => { const on = b.dataset.id === id; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
-  fig.innerHTML = ph(`${PRODUCTS[page].folder}/${id}/${filesOf(row, id)[0]}`, `${nameOf(row)} - ${TEXT[lang].nav[page]}`, 'eager') + `<figcaption>${nameOf(row)}</figcaption>`;
+  fig.innerHTML = ph(showPath(page, g, row), `${nameOf(row)} - ${TEXT[lang].nav[page]}`, 'eager') + `<figcaption>${nameOf(row)}</figcaption>`;
   bindZoom(fig.querySelector('.ph'));
   centerOption(seg, true);                                         // narrow screens: the options scroll sideways, keep the chosen one in view
 }
