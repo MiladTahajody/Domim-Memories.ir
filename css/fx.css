@@ -50,20 +50,23 @@
 @media (max-width:640px){.fy:nth-child(n+11){display:none}}   /* phones: 10 shapes are enough */
 
 /* ==== 2. PAGE TRANSITIONS ====
-   Browsers that support cross-document view transitions (Chrome, Edge, Safari 18.2+) fade the page content
-   while the header and background stay in place. Other browsers use the "leaving" class from fx.js. */
-@media (prefers-reduced-motion:no-preference){
+   Calm and stable on every device: the pages only FADE (opacity), nothing moves, scales or rotates, and the header and the background are not
+   animated separately (animating them made tablets and phones shake / zoom a little on every page change).
+   - Computers (a real mouse): browsers with cross-document view transitions (Chrome, Edge, Safari 18.2+) cross-fade the pages;
+     other browsers use the "leaving" class from fx.js (a short fade-out before the next page opens).
+   - Touch devices (phones, tablets): no page animation at all, the next page simply opens. */
+@media (prefers-reduced-motion:no-preference) and (hover:hover) and (pointer:fine){
   @view-transition{navigation:auto}
-  #site-header{view-transition-name:hdr}
-  #bg{view-transition-name:bgl}
-  ::view-transition-old(root){animation:vt-out .22s ease both}
-  ::view-transition-new(root){animation:vt-in .5s cubic-bezier(.2,.8,.2,1) both}
+  ::view-transition-old(root){animation:vt-out .18s ease both}
+  ::view-transition-new(root){animation:vt-in .3s ease both}
 }
-@keyframes vt-out{to{opacity:0;transform:translateY(-8px) scale(.985)}}
-@keyframes vt-in{from{opacity:0;transform:translateY(18px) scale(.985)}}
-html.fx #page{animation:page-in .7s cubic-bezier(.2,.8,.2,1) both}
-@keyframes page-in{from{opacity:0;transform:perspective(1000px) translateY(22px) rotateX(3deg)}}
-html.fx.leaving #page,html.fx.leaving #site-footer{opacity:0;transform:perspective(1000px) translateY(-10px) scale(.985);transition:opacity .2s ease,transform .2s ease}
+@keyframes vt-out{to{opacity:0}}
+@keyframes vt-in{from{opacity:0}}
+@media (hover:hover) and (pointer:fine){
+  html.fx #page{animation:page-in .35s ease both}
+}
+@keyframes page-in{from{opacity:0}}
+html.fx.leaving #page,html.fx.leaving #site-footer{opacity:0;transition:opacity .18s ease}
 
 /* ==== 3. SCROLL REVEAL + 3D TILT ====
    [data-rv] elements wait (invisible) until they scroll into view, then tilt up out of the screen. --d = stagger delay. */

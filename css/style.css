@@ -410,7 +410,7 @@ html[dir=rtl] .tags{direction:rtl}
 .octa p{color:#4a4568}
 /* ---- Order button -> messenger menu (speed dial). js/app.js: bindOrder. A tap squishes the button, sparkles + a ring burst out of it,
    and the messengers (WhatsApp / Telegram / Bale = ORDER_CHANNELS in js/content.js) pop out one after another. ---- */
-.octa{position:relative;z-index:5;overflow-x:clip}   /* sparkles / ring can never widen the page (that made tablets shake and zoom); vertically the menu may still pop out */
+.octa{position:relative;z-index:5}   /* no overflow clipping here: the menu must be able to pop out above the box (Safari clipped it); the sparkles and the ring are kept inside the box by js/app.js bindOrder */
 .ord{position:relative;display:inline-block;flex:none}
 .ord-btn .ic{transition:transform .6s cubic-bezier(.3,1.6,.5,1)}
 .ord.open .ord-btn .ic{transform:rotate(360deg) scale(1.15)}
@@ -419,12 +419,12 @@ html[dir=rtl] .tags{direction:rtl}
 @keyframes ord-press{0%{transform:scale(1)}25%{transform:scale(.9,.84)}55%{transform:scale(1.08,1.12)}100%{transform:scale(1)}}
 /* sparkles + ring (created by bindOrder, centred on the button, not clipped by it) */
 .ord-fx{position:absolute;left:50%;top:50%;width:0;height:0;pointer-events:none;z-index:40}
-.ord-fx::before{content:"";position:absolute;width:130px;height:130px;margin:-65px 0 0 -65px;border-radius:50%;border:3px solid var(--pc);opacity:0}
+.ord-fx::before{content:"";position:absolute;left:-65px;top:-65px;width:130px;height:130px;box-sizing:border-box;border-radius:50%;border:3px solid var(--pc);opacity:0;transform:scale(.3)}
 .ord.fire .ord-fx::before{animation:ord-ring .8s ease-out}
 .ord-fx i{position:absolute;width:var(--s);height:var(--s);margin:calc(var(--s) / -2) 0 0 calc(var(--s) / -2);border-radius:50%;background:var(--c);opacity:0}
 .ord-fx i.star{border-radius:0;clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%);width:calc(var(--s) * 2);height:calc(var(--s) * 2);margin:calc(var(--s) * -1) 0 0 calc(var(--s) * -1)}
 .ord.fire .ord-fx i{animation:ord-burst .9s cubic-bezier(.15,.8,.3,1) forwards}
-@keyframes ord-ring{0%{transform:scale(.3);opacity:.9}100%{transform:scale(1.5);opacity:0}}
+@keyframes ord-ring{0%{transform:scale(.3);opacity:.9}100%{transform:scale(var(--rk,1.5));opacity:0}}
 @keyframes ord-burst{0%{transform:translate(0,0) scale(.4) rotate(0);opacity:1}70%{opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(1) rotate(180deg);opacity:0}}
 /* the menu: always opens upwards (js/app.js ensureRoom scrolls the page a little first when the button is too high on the screen) */
 .ord-menu{position:absolute;z-index:30;inset-inline-end:0;bottom:calc(100% + 14px);display:flex;flex-direction:column;gap:10px;align-items:stretch;min-width:max(100%,210px);
