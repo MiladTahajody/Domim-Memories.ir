@@ -43,25 +43,24 @@ const PRODUCTS = {
     folder: 'album',                 // image folder in the project root
     groups: [                        // each group = one row of tags (shown top to bottom)
       { title: { fa: 'انواع آلبوم', en: 'Album Types' }, display: 'showcase', items: [   // display:'showcase' = ONE big photo + a 4-option selector (ONE photo per option), not tags
-        ['nostalgic',     'نوستالژیک (خودچسب)', 'Nostalgic (Self-adhesive)', 1],
-        ['journal-style', 'ژورنالی (خودچسب)',   'Journal-style (Self-adhesive)', 1],
-        ['shirt-style',   'پیراهنی',            'Shirt-style', 1],
-        ['framed',        'قاب‌دار',            'Framed', 1]
+        ['nostalgia',     'نوستالژی', 'Nostalgia', 1],
+        ['journal', 'ژورنالی',   'Journal', 1],
+        ['drymount',   'شومیزی',            'DryMount', 1],
+        ['framed',        'فریم دار',            'Framed', 1]
       ]},
       { title: { fa: 'طرح‌های آلبوم', en: 'Album Designs' }, items: [
-        ['girls',                'دخترانه',            'Girls', 4],
-        ['boys',                 'پسرانه',             'Boys', 3],
-        ['pregnancy',            'بارداری',            'Pregnancy', 2],
-        ['girls-boys',           'دختر و پسر',         'Girls-Boys', 4],
-        ['adult',                'بزرگسال',            'Adult', 3],
-        ['family',               'خانواده',            'Family', 4],
-        ['infant',               'نوزاد',              'Infant', 2],
-        ['twins',                'دوقلو',              'Twins', 3],
-        ['animals',              'حیوانات',            'Animals', 4],
-        ['calligraphy',          'خوشنویسی',           'Calligraphy', 2],
-        ['animation-characters', 'شخصیت‌های انیمیشنی', 'Animation Characters', 3],
-        ['wedding',              'عروسی',              'Wedding', 4],
-        ['events',               'مناسبت‌ها',          'Events', 2]
+        ['girls',                'دخترانه',            'Girls', 56],
+        ['boys',                 'پسرانه',             'Boys', 54],
+        ['pregnancy',            'بارداری',            'Pregnancy', 14],
+        ['girls-boys',           'دختر و پسر',         'Girls-Boys', 7],
+        ['family',               'خانواده',            'Family', 6],
+        ['infant',               'نوزاد',              'Infant', 19],
+        ['twins',                'دوقلو',              'Twins', 10],
+        ['pattern',              'پترن',            'Pattern', 24],
+        ['calligraphy',          'کالیگرافی',           'Calligraphy', 5],
+        ['animation', 'انیمیشن', 'Animation', 14],
+        ['wedding',              'عروسی',              'Wedding', 15],
+        ['events',               'مناسبتی',          'Events', 2]
       ]}
     ]
   },
