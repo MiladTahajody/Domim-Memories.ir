@@ -70,10 +70,10 @@ const PRODUCTS = {
   cards: {                       // key = page name: cards.html (menu word: TEXT nav.cards); photos in card/<tag>/<tag>-1.webp ...
     folder: 'card',
     groups: [{ title: null, items: [
-      ['teddy-girl', 'کارت ماه‌گرد تدی دخترانه',   'Girl Teddy Moon Card', 3],
-      ['teddy-boy',  'کارت ماه‌گرد تدی پسرانه',    'Boy Teddy Moon Card', 3],
-      ['baby',       'کارت ماه‌گرد نی‌نی کوچولو',  'Little Baby Moon Card', 3],
-      ['animals',    'کارت ماه‌گرد حیوانات',       'Animals Moon Card', 3]
+      ['teddy-girl', 'کارت ماه‌گرد تدی دخترانه',   'Girl Teddy Moon Card', 4],
+      ['teddy-boy',  'کارت ماه‌گرد تدی پسرانه',    'Boy Teddy Moon Card', 5],
+      ['baby',       'کارت ماه‌گرد نی‌نی کوچولو',  'Little Baby Moon Card', 4],
+      ['animals',    'کارت ماه‌گرد حیوانات',       'Animals Moon Card', 4]
     ]}]
   },
   newspapers: {
@@ -98,7 +98,7 @@ const PRODUCTS = {
 /* ---------- 2b. REVIEW SCREENSHOTS (Home, "Customer reviews") ---------- */
 // How many screenshots the horizontal review gallery has. Files: review/review-1.webp ... review/review-N.webp
 // (webp, 16:9 desktop screenshot). Change this number when you add or remove files.
-const REVIEW_COUNT = 5;
+const REVIEW_COUNT = 9;
 
 /* ---------- 3. TEXTS (all sample copy: replace with real content) ---------- */
 const TEXT = {
