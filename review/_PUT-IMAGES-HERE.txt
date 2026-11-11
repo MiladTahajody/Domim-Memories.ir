@@ -1,4 +1,0 @@
-Customer review screenshots (Home page, "Customer reviews" gallery).
-Format: webp, desktop-style 16:9 screenshot (e.g. 1280 x 720).
-File names: review-1.webp, review-2.webp, review-3.webp ...
-Then set REVIEW_COUNT in js/content.js to the number of files (the gallery has 5 placeholders by default).
